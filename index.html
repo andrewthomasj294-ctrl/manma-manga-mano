@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manma Manga Mano</title>
+<style>
+:root{
+  --bg:#090a0f; --panel:#11131b; --panel2:#171a24; --text:#f5f5f7;
+  --muted:#969baa; --line:#272b38; --accent:#ff4d6d; --accent2:#8b5cf6;
+  --gold:#f5c451; --good:#61d095;
+}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 80% 0%,#26152a 0,#090a0f 35%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit} button{cursor:pointer}
+.nav{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;background:rgba(9,10,15,.84);backdrop-filter:blur(16px);z-index:20}
+.logo{font-weight:900;letter-spacing:.04em;font-size:19px}.logo span{color:var(--accent)}
+.navlinks{display:flex;gap:24px;color:#c7cad4;font-size:14px}.navlinks a{cursor:pointer}.navlinks a.active,.navlinks a:hover{color:white}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));font-weight:800}
+main{max-width:1200px;margin:auto;padding:60px 5% 90px}
+.hero{text-align:center;padding:35px 0 45px}.eyebrow{color:#ff7890;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+h1{font-size:clamp(42px,7vw,76px);line-height:.98;margin:14px 0 18px;letter-spacing:-.055em}
+.hero p{max-width:650px;margin:0 auto 28px;color:var(--muted);font-size:17px}
+.search{max-width:720px;margin:auto;display:flex;gap:10px;background:var(--panel);padding:8px;border:1px solid var(--line);border-radius:18px}
+.search input{flex:1;background:transparent;border:0;outline:0;color:white;padding:12px 14px}.search button{border:0;background:white;color:#111;padding:12px 18px;border-radius:12px;font-weight:800}
+.ctas{display:flex;justify-content:center;gap:12px;margin-top:18px;flex-wrap:wrap}.primary,.secondary{padding:13px 19px;border-radius:12px;border:1px solid var(--line);font-weight:800}.primary{background:linear-gradient(135deg,var(--accent),#ff7b54);color:white;border:0}.secondary{background:var(--panel);color:white}
+.section{margin-top:42px}.sectionhead{display:flex;align-items:end;justify-content:space-between;margin-bottom:17px}.sectionhead h2{margin:0;font-size:22px}.sectionhead span{color:var(--muted);font-size:13px}
+.chips{display:flex;gap:9px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:var(--panel);color:#d8dae2;padding:10px 14px;border-radius:999px}.chip.selected,.chip:hover{border-color:#ff5d79;background:#25131b;color:white}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-4px);border-color:#414758}.cover{height:245px;display:flex;align-items:end;padding:14px;background-size:cover;background-position:center}.cover .badge{background:rgba(0,0,0,.68);padding:6px 8px;border-radius:7px;font-size:11px}.cardbody{padding:14px}.title{font-weight:800}.meta{color:var(--muted);font-size:12px;margin-top:6px}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.tag{font-size:10px;color:#bfc2cc;background:#20232e;border-radius:5px;padding:4px 6px}.card button{width:100%;margin-top:12px;padding:9px;border:1px solid var(--line);border-radius:9px;background:#1d202a;color:white}
+.wheelbox{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center;background:linear-gradient(135deg,#15111d,#10121a);border:1px solid var(--line);border-radius:24px;padding:30px}
+.wheel{width:min(330px,75vw);aspect-ratio:1;border-radius:50%;margin:auto;border:10px solid #252936;box-shadow:0 0 0 5px #11131b,0 20px 70px rgba(0,0,0,.5);background:conic-gradient(#ff4d6d 0 45deg,#8b5cf6 45deg 90deg,#f5c451 90deg 135deg,#61d095 135deg 180deg,#38bdf8 180deg 225deg,#f97316 225deg 270deg,#ec4899 270deg 315deg,#7c3aed 315deg 360deg);position:relative;transition:transform 4s cubic-bezier(.12,.8,.18,1)}
+.wheel:after{content:"🎡";position:absolute;inset:36%;background:#0b0c12;border:5px solid white;border-radius:50%;display:grid;place-items:center;font-size:26px}
+.pointer{width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:28px solid white;position:absolute;top:-5px;left:50%;transform:translateX(-50%);z-index:3}
+.wheelcopy h2{font-size:32px;margin:0 0 10px}.wheelcopy p{color:var(--muted);line-height:1.6}.result{margin-top:18px;padding:14px;border-radius:12px;background:#0c0e14;border:1px solid var(--line);display:none}
+.filters{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.filter{background:var(--panel);border:1px solid var(--line);padding:14px;border-radius:13px}.filter small{display:block;color:var(--muted);margin-bottom:7px}
+footer{border-top:1px solid var(--line);padding:30px 5%;color:#777b87;text-align:center;font-size:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;place-items:center;z-index:50;padding:20px}.modal.show{display:grid}.modalbox{max-width:680px;width:100%;background:#11131b;border:1px solid #303443;border-radius:20px;padding:24px;position:relative}.close{position:absolute;right:15px;top:12px;background:transparent;color:white;border:0;font-size:25px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.wheelbox{grid-template-columns:1fr}.filters{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}}
+@media(max-width:520px){main{padding-top:35px}.grid{grid-template-columns:1fr 1fr;gap:10px}.cover{height:190px}.cardbody{padding:10px}.filters{grid-template-columns:1fr}.wheelbox{padding:20px}.search button{padding:10px}.hero p{font-size:15px}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">MANMA <span>MANGA</span> MANO</div>
+  <div class="navlinks"><a class="active" onclick="go('home')">Home</a><a onclick="go('discover')">Discover</a><a onclick="go('wheel')">Wheel</a><a onclick="go('library')">My Library</a></div>
+  <div class="avatar">M</div>
+</nav>
+
+<main id="home">
+<section class="hero">
+  <div class="eyebrow">Your next obsession starts here</div>
+  <h1>What should you<br><span style="color:#ff5b78">read next?</span></h1>
+  <p>Stop scrolling through endless titles. Tell us your mood, taste and tolerance for fictional suffering. We'll narrow it down.</p>
+  <div class="search"><input id="search" placeholder="Search manga, manhwa, manhua..."><button onclick="searchTitles()">Search</button></div>
+  <div class="ctas"><button class="primary" onclick="go('discover')">✦ Find My Next Read</button><button class="secondary" onclick="go('wheel')">🎡 Spin the Wheel</button></div>
+</section>
+
+<section class="section">
+ <div class="sectionhead"><h2>What are you in the mood for?</h2><span>Quick discovery</span></div>
+ <div class="chips" id="moodchips">
+  <button class="chip" onclick="pick(this,'Action')">🔥 Hype & Action</button><button class="chip" onclick="pick(this,'Dark')">🌑 Dark</button><button class="chip" onclick="pick(this,'Funny')">😂 Funny</button><button class="chip" onclick="pick(this,'Romance')">❤️ Romance</button><button class="chip" onclick="pick(this,'Mind-bending')">🧠 Mind-bending</button><button class="chip" onclick="pick(this,'Worldbuilding')">🌎 Amazing World</button><button class="chip" onclick="pick(this,'Emotional')">😭 Emotional</button><button class="chip" onclick="pick(this,'OP')">👑 Overpowered MC</button>
+ </div>
+</section>
+
+<section class="section">
+ <div class="sectionhead"><h2>Trending now</h2><span>Popular picks</span></div>
+ <div class="grid" id="trending"></div>
+</section>
+
+<section class="section" id="wheel">
+ <div class="wheelbox">
+  <div><div class="pointer"></div><div class="wheel" id="wheelEl"></div></div>
+  <div class="wheelcopy"><div class="eyebrow">Decision paralysis, defeated</div><h2>Let fate choose.</h2><p>Filter your preferences first, then let the wheel pick one from your shortlist. Humanity has invented democracy, artificial intelligence and still can't decide what to read.</p><button class="primary" onclick="spin()">🎡 Spin the Wheel</button><div class="result" id="wheelResult"></div></div>
+ </div>
+</section>
+
+<section class="section" id="discover">
+ <div class="sectionhead"><h2>Build your perfect shortlist</h2><span id="count">Choose filters</span></div>
+ <div class="filters">
+  <div class="filter"><small>Genre</small><select id="genre" onchange="renderResults()"><option value="">Any genre</option><option>Action</option><option>Fantasy</option><option>Romance</option><option>Horror</option><option>Comedy</option><option>Thriller</option><option>Sports</option><option>Sci-Fi</option></select></div>
+  <div class="filter"><small>Mood</small><select id="mood" onchange="renderResults()"><option value="">Any mood</option><option>Dark</option><option>Funny</option><option>Emotional</option><option>OP</option><option>Worldbuilding</option><option>Mind-bending</option></select></div>
+  <div class="filter"><small>Pacing</small><select id="pace" onchange="renderResults()"><option value="">Any pace</option><option>Fast</option><option>Slow Burn</option></select></div>
+  <div class="filter"><small>Length</small><select id="length" onchange="renderResults()"><option value="">Any length</option><option>Short</option><option>Long</option></select></div>
+ </div>
+ <div class="grid" id="results" style="margin-top:18px"></div>
+</section>
+
+<section class="section" id="library">
+ <div class="sectionhead"><h2>My Library</h2><span id="libcount">0 saved</span></div>
+ <div class="grid" id="librarygrid"></div>
+</section>
+</main>
+
+<footer>MANMA MANGA MANO · A discovery platform, not a chapter-hosting site.</footer>
+
+<div class="modal" id="modal"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><div id="modalcontent"></div></div></div>
+
+<script>
+const titles=[
+ {t:"Solo Leveling",type:"Manhwa",genre:"Action",moods:["Action","OP"],pace:"Fast",length:"Long",rating:"9.1",color:"linear-gradient(135deg,#151a35,#53225c)",desc:"A hunter who starts at the bottom receives a mysterious system that lets him grow beyond every limit."},
+ {t:"Frieren: Beyond Journey's End",type:"Manga",genre:"Fantasy",moods:["Emotional","Worldbuilding"],pace:"Slow Burn",length:"Long",rating:"9.0",color:"linear-gradient(135deg,#152c38,#705d91)",desc:"An elf mage begins a journey of reflection after the adventure she thought would last forever has already ended."},
+ {t:"Dandadan",type:"Manga",genre:"Action",moods:["Funny","Action"],pace:"Fast",length:"Long",rating:"8.8",color:"linear-gradient(135deg,#2b1027,#e34c76)",desc:"Aliens, ghosts, romance and teenagers collide in a wildly energetic supernatural adventure."},
+ {t:"The Boxer",type:"Manhwa",genre:"Sports",moods:["Emotional","Mind-bending"],pace:"Fast",length:"Long",rating:"8.9",color:"linear-gradient(135deg,#10131b,#53606e)",desc:"A psychologically intense boxing story about talent, trauma and what makes a fighter."},
+ {t:"Omniscient Reader",type:"Manhwa",genre:"Fantasy",moods:["Action","Worldbuilding","OP"],pace:"Fast",length:"Long",rating:"9.0",color:"linear-gradient(135deg,#151827,#283c7b)",desc:"The only reader who knows how the apocalypse novel ends becomes trapped inside its story."},
+ {t:"Kaguya-sama: Love Is War",type:"Manga",genre:"Romance",moods:["Funny"],pace:"Slow Burn",length:"Long",rating:"8.7",color:"linear-gradient(135deg,#35131c,#b65b78)",desc:"Two brilliant students are in love, but neither will confess first. So naturally, psychological warfare begins."},
+ {t:"Chainsaw Man",type:"Manga",genre:"Horror",moods:["Dark","Action"],pace:"Fast",length:"Long",rating:"8.7",color:"linear-gradient(135deg,#1e1310,#b84b27)",desc:"A broke devil hunter is reborn with a chainsaw-powered heart and a deeply strange new life."},
+ {t:"Blue Lock",type:"Manga",genre:"Sports",moods:["Action","OP"],pace:"Fast",length:"Long",rating:"8.5",color:"linear-gradient(135deg,#101c37,#1b75c5)",desc:"Hundreds of strikers compete in an extreme program designed to create Japan's ultimate egoist."}
+];
+let selectedMood="", rotation=0, library=JSON.parse(localStorage.getItem("mmm-library")||"[]");
+
+function card(x){
+ return `<article class="card"><div class="cover" style="background:${x.color}"><span class="badge">${x.type}</span></div><div class="cardbody"><div class="title">${x.t}</div><div class="meta">★ ${x.rating} · ${x.genre} · ${x.length}</div><div class="tags">${x.moods.map(m=>`<span class="tag">${m}</span>`).join("")}</div><button onclick="details('${x.t}')">${library.includes(x.t)?'♥ Saved':'＋ Add to library'}</button></div></article>`;
+}
+function render(arr,id){document.getElementById(id).innerHTML=arr.length?arr.map(card).join(""):`<div style="color:#969baa;padding:25px 0">No exact matches. The fictional gods have rejected this combination. Try one less filter.</div>`}
+function renderResults(){
+ const g=document.getElementById("genre").value,m=document.getElementById("mood").value,p=document.getElementById("pace").value,l=document.getElementById("length").value;
+ let a=titles.filter(x=>(!g||x.genre===g)&&(!m||x.moods.includes(m))&&(!p||x.pace===p)&&(!l||x.length===l));
+ document.getElementById("count").textContent=a.length+" matching titles";
+ render(a,"results");
+}
+function pick(el,m){document.querySelectorAll("#moodchips .chip").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");selectedMood=m;document.getElementById("mood").value=m;go("discover");renderResults()}
+function details(name){
+ const x=titles.find(y=>y.t===name); if(!x)return;
+ document.getElementById("modalcontent").innerHTML=`<div class="eyebrow">${x.type} · ${x.genre}</div><h2 style="font-size:34px;margin:8px 0">${x.t}</h2><p style="color:#aaa;line-height:1.7">${x.desc}</p><p><b>Rating:</b> ★ ${x.rating}<br><b>Pacing:</b> ${x.pace}<br><b>Length:</b> ${x.length}</p><div class="tags">${x.moods.map(m=>`<span class="tag">${m}</span>`).join("")}</div><button class="primary" style="margin-top:18px" onclick="save('${x.t}');closeModal()">♥ ${library.includes(x.t)?'Remove from':'Add to'} library</button>`;
+ document.getElementById("modal").classList.add("show");
+}
+function closeModal(){document.getElementById("modal").classList.remove("show");renderLibrary()}
+function save(name){if(library.includes(name))library=library.filter(x=>x!==name);else library.push(name);localStorage.setItem("mmm-library",JSON.stringify(library));renderLibrary()}
+function renderLibrary(){const a=titles.filter(x=>library.includes(x.t));document.getElementById("libcount").textContent=a.length+" saved";render(a,"librarygrid")}
+function searchTitles(){const q=document.getElementById("search").value.toLowerCase();const a=titles.filter(x=>(x.t+x.genre+x.type+x.moods.join(" ")).toLowerCase().includes(q));go("discover");document.getElementById("count").textContent=a.length+" search results";render(a,"results")}
+function spin(){
+ const pool=titles.filter(x=>!selectedMood||x.moods.includes(selectedMood));
+ const chosen=pool[Math.floor(Math.random()*pool.length)]||titles[0];
+ rotation+=1440+Math.floor(Math.random()*360);
+ document.getElementById("wheelEl").style.transform=`rotate(${rotation}deg)`;
+ setTimeout(()=>{document.getElementById("wheelResult").style.display="block";document.getElementById("wheelResult").innerHTML=`<b>🎯 The wheel chose: ${chosen.t}</b><br><span style="color:#969baa">${chosen.type} · ${chosen.genre} · ★ ${chosen.rating}</span><br><button class="secondary" style="margin-top:10px" onclick="details('${chosen.t}')">View title</button>`},4100);
+}
+function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"})}
+render(titles.slice(0,4),"trending");renderResults();renderLibrary();
+</script>
+</body>
+</html>
